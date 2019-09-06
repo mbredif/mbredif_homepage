@@ -14,15 +14,17 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
-  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i">
+  <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="vendor/academicons/css/academicons.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
   <!-- Custom styles for this template -->
   <link href="css/animate.css" rel="stylesheet">
   <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
   <link href="css/resume.css" rel="stylesheet">
+  <link href="css/extras.css" rel="stylesheet">
 
   <!-- scripts on load -->
   <script src="vendor/d3/d3.min.js"></script>
@@ -31,7 +33,7 @@
 
 </head>
 
-<body id="page-top" onload="reviewingVis('reviewing.json'); getJournalPublicationsAuthor('mathieu-bredif');getConfPublicationsAuthor('mathieu-bredif');getBookPublicationsAuthor('mathieu-bredif');getWorkshopPublicationsAuthor('mathieu-bredif');getOtherPublicationsAuthor('mathieu-bredif');getInvitedTalksAuthor('mathieu-bredif');">
+<body id="page-top" onload="reviewingVis('reviewing.json'); getPublicationsAuthor('mathieu-bredif', 'Mathieu Brédif');">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
     <select class="selectpicker" data-width="fit">
@@ -55,6 +57,7 @@
           <a class="nav-link js-scroll-trigger lang-en" href="#about">About</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#about">Présentation</a>
         </li>
+        <!--TODO
         <li class="nav-item">
           <a class="nav-link js-scroll-trigger lang-en" href="#interest">Research Interests</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#interest">Sujets de recherche</a>
@@ -67,6 +70,7 @@
           <a class="nav-link js-scroll-trigger lang-en" href="#experience">Experience</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#experience">Parcours professionnel</a>
         </li>
+      -->
         <li class="nav-item">
           <a class="nav-link js-scroll-trigger lang-en" href="#education">Education</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#education">Formation</a>
@@ -75,6 +79,7 @@
           <a class="nav-link js-scroll-trigger lang-en" href="#publications">Publications</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#publications">Publications</a>
         </li>
+        <!--TODO
         <li class="nav-item">
           <a class="nav-link js-scroll-trigger lang-en" href="#projects">Projects</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#projects">Projets</a>
@@ -83,6 +88,7 @@
           <a class="nav-link js-scroll-trigger lang-en" href="#other">Other research activities</a>
           <a class="nav-link js-scroll-trigger lang-fr" href="#other">Autres activités de recherche</a>
         </li>
+      -->
       </ul>
     </div>
   </nav>
@@ -106,7 +112,7 @@
             <i class="fab fa-linkedin-in"></i>
           </a>
           <a href="https://www.researchgate.net/profile/Mathieu_Bredif">
-            <i class="fab fa-researchgate"></i>
+            <i class="ai ai-researchgate"></i>
           </a>
           <a href="https://github.com/mbredif">
             <i class="fab fa-github"></i>
@@ -122,19 +128,24 @@
           </a>
           -->
           <a href="https://scholar.google.fr/citations?user=KGayfBgAAAAJ">
-            <i class="fab fa-google"></i>
+            <i class="ai ai-google-scholar"></i>
           </a>
           <a href="https://publons.com/researcher/1436546/mathieu-bredif/">
-            <i class="fab fa-publons"></i>
+            <i class="ai ai-publons"></i>
           </a>
-          <!-- ORCID 0000-0003-0228-1232 -->
-          <!-- Hal mathieu-bredif -->
+          <a href="https://orcid.org/0000-0003-0228-1232">
+            <i class="ai ai-orcid"></i>
+          </a>
+          <a href="https://cv.archives-ouvertes.fr/mathieu-bredif/">
+            <i class="ai"><img src="img/icons/hal-b2.svg" width=45px/></i>
+          </a>
         </div>
       </div>
     </section>
 
     <hr class="m-0">
 
+<!--TODO
     <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="interest">
       <div class="w-100">
         <h2 class="mb-5 lang-en">Research Interests</h2>
@@ -316,7 +327,7 @@
         </div>
       </div>
     </section>
-
+-->
     <hr class="m-0">
 
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="education">
@@ -326,7 +337,7 @@
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
           <div class="resume-content">
             <h3 class="mb-0">Telecom ParisTech</h3>
-            <div class="subheading mb-3">PhD in TODO</div>
+            <div class="subheading mb-3">PhD</div>
           </div>
           <div class="resume-date text-md-right">
             <span class="text-primary">September 2005 - May 2010</span>
@@ -361,37 +372,18 @@
       <div class="w-100">
         <h2 class="mb-5">Publications</h2>
 
-        <div class="subheading mb-3 mt-3">Journals</div>
-        <ol id="pubJ" class="sub">
-        </ol>
-
-        <div class="subheading mb-3 mt-3">Conferences</div>
-        <ol id="pubC" class="sub">
-        </ol>
-
-        <div class="subheading mb-3 mt-3">Books and Chapters</div>
-        <ol id="pubB" class="sub">
-        </ol>
-
-        <div class="subheading mb-3 mt-3">Workshops and Posters</div>
-        <ol id="pubW" class="sub">
-        </ol>
-
-        <div class="subheading mb-3 mt-3">Other Publications (Technical Reports, Dissertations, Dissemination)</div>
-        <ol id="pubO" class="sub">
-        </ol>
+        <span id="pubJ"><div class="subheading mb-3 mt-3">Journals</div></span>
+        <span id="pubC"><div class="subheading mb-3 mt-3">Conferences</div></span>
+        <span id="pubB"><div class="subheading mb-3 mt-3">Books and Chapters</div></span>
+        <span id="pubW"><div class="subheading mb-3 mt-3">Workshops and Posters</div></span>
+        <span id="pubP"><div class="subheading mb-3 mt-3">Preprints</div></span>
+        <span id="pubD"><div class="subheading mb-3 mt-3">Dissertation</div></span>
+        <span id="pubT"><div class="subheading mb-3 mt-3">Invited Talk</div></span>
 
       </div>
     </section>
 
-    <section class="section appear clearfix p-3 p-lg-5">
-      <div class="w-100">
-        <h2 class="mb-5 mt-5">Invited Talks</h2>
-        <ol id="talks" class="sub">
-        </ol>
-      </div>
-    </section>
-
+    <!--TODO
     <hr class="m-0">
 
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="projects">
@@ -468,13 +460,13 @@
       </div>
       <div class="cut cut-bottom"></div>
     </section>
-
+-->
     <hr class="m-0">
 
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="other">
       <div class="w-100">
         <h2 class="mb-5">Other research activities</h2>
-
+<!--TODO
         <div class="subheading mb-3">Software development</div>
 
         <div class="row projects">
@@ -509,44 +501,39 @@
             </div>
           </div>
         </div>
-
         <div class="subheading mb-3 mt-3">Teaching</div>
-
-        <div class="subheading mb-3 mt-3">Other research activities</div>
+-->
+        <div class="subheading mb-3 mt-3">Societies</div>
         <ul class="fa-ul mb-0">
           <li>
             <i class="fa-li fa fa-square"></i>
-            <a href="#">Co-chair TODO</a> since TODO</li>
+            Co-chair of <a href="https://www.isprs.org/">ISPRS</a> Working Group II/3 on <a href="http://www2.isprs.org/commissions/comm2/wg3.html">Point Cloud Processing</a> (2016-2020)</li>
           <li>
-            <i class="fa-li fa fa-square"></i>
-            <a href="#">Co-chair TODO</a> since TODO</li>
-          <li>
-            <i class="fa-li fa fa-square"></i>
-            <a href="#">Co-chair TODO</a> since TODO</li>
-          <li>
-            <i class="fa-li fa fa-square"></i>
-            Regular reviewer of most important journals in TODO</li>
+            <i class="fa-li fa fa-check-square"></i>
+            Chair of <a href="https://www.isprs.org/">ISPRS</a> Working Group III/5 on <b>Computer Graphics and Remote Sensing</b> (2012-2016)</li>
         </ul>
 
-        <div class="subheading mb-3 mt-3">Supervisions</div>
+        <div class="subheading mb-3 mt-3">PhD Supervisions</div>
         <ul class="fa-ul mb-0">
           <li>
             <i class="fa-li fa fa-square"></i>
-            Qasem Safariallahkheili (PhD, 2018-...), directed by <a href="schristophe_homepage">Sidonie Christophe</a> (LaSTIG)</li>
+            Qasem Safariallahkheili (2018-...) directed by <a href="/schristophe_homepage">Sidonie Christophe</a> (LaSTIG)</li>
           <li>
             <i class="fa-li fa fa-square"></i>
-            Evelyn Paiz (PhD, 2018-...), directed by <a href="schristophe_homepage">Sidonie Christophe</a> (LaSTIG)</li>
+            Evelyn Paiz (2018-...) directed by <a href="/schristophe_homepage">Sidonie Christophe</a> (LaSTIG)</li>
           <li>
             <i class="fa-li fa fa-square"></i>
-            Pierre Biasutti (PhD, 2016-2019), co-directed by Aurélie Bugeau (LaBRI) and Jean-François Aujol (Université de Bordeaux)</li>
+            <a href="https://www.labri.fr/perso/pbiasutt/">Pierre Biasutti</a> (PhD, 2016-2019),
+            co-directed by <a href="http://www.labri.fr/perso/bugeau/">Aurélie Bugeau</a> (LaBRI)
+            and <a href="https://www.math.u-bordeaux.fr/~jaujol/">Jean-François Aujol</a> (Université de Bordeaux)</li>
           <li>
             <i class="fa-li fa fa-check-square"></i>
-            Murat Yirci (PhD, TODO), directed by Nicolas Paparoditis</li>
+            Murat Yirci (PhD, 2013-2016), directed by Nicolas Paparoditis</li>
           <li>
             <i class="fa-li fa fa-check-square"></i>
-            Fabien Coubard (PhD, TODO), directed by Nicolas Paparoditis</li>
+            Fabien Coubard (PhD, 2011-2014), directed by Nicolas Paparoditis</li>
         </ul>
-
+<!--TODO
         <div class="subheading mb-3 mt-3">Reviewing</div>
         <div id="reviewings" class="sub">
             <div id="revj">
@@ -565,7 +552,7 @@
         </ul>
       </div>
     </section>
-
+-->
   </div>
 
   <!-- Bootstrap core JavaScript -->

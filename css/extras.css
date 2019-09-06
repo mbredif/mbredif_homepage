@@ -1,0 +1,7 @@
+.fa-publons::before {
+  content: url('img/icons/publons-b.svg')
+}
+
+.imgLink {
+  float:right
+}
