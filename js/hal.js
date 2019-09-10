@@ -23,7 +23,7 @@
 // documentation on HAL API: https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 
 var halApi = function(halId){
-  const fl = 'halId_s,citationFull_s,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,title_s,label_bibtex';
+  const fl = 'halId_s,authIdHalFullName_fs,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,linkExtUrl_s,en_title_s,fr_title_s,label_bibtex,citationRef_s';
   return "https://api.archives-ouvertes.fr/search/?q=authIdHal_s:%22"+halId+"%22&wt=json&sort=producedDateY_i desc&rows=10000&fl="+fl;
 }
 
@@ -101,19 +101,16 @@ var getPublicationsAuthor = function(halId, fullName){
   getInvitedTalksAuthor(halId, fullName);
 }
 
-function parseCitation(doc, fullName, citationElement, linksElement)
+function parseCitation(doc, citationElement, linksElement)
 {
   var regex = /. <a[^>]*href="(https?:\/\/([^"\/]*)\/[^"]*)"[^>]*>&#x27E8;([^<]*)&#x27E9;<\/a>/;
-  var citation = doc.citationFull_s;
+  var citation = doc.citationRef_s;
   while((matches = regex.exec(citation)) !== null) {
     const url = matches[1];
     var host = matches[2];
     const text = matches[3];
     citation = citation.replace(matches[0],'');
-    if (host.startsWith('hal.') || host.endsWith('.archives-ouvertes.fr'))
-      host = 'hal.archives-ouvertes.fr';
     var icons = {
-      'hal.archives-ouvertes.fr': 'hal.png',
       'dx.doi.org': 'doi.svg',
       'www.mdpi.com': 'mdpi.jpg'
     }
@@ -130,8 +127,6 @@ function parseCitation(doc, fullName, citationElement, linksElement)
     aElement.appendChild(imgElement);
     linksElement.appendChild(aElement);
   }
-  citation = citation.replace(fullName, '<u>'+fullName+'</u>');
-  citation = citation.replace(doc.title_s, '<a href="https://hal.archives-ouvertes.fr/'+doc.halId_s+'">'+doc.title_s+'</a>');
   citationElement.innerHTML = citation;
 }
 
@@ -163,14 +158,46 @@ function createBibtex(label_bibtex, parent)
 }
 
 var createPub = function(doc, fullName, parent){
+  // console.log(doc);
   if (!parent) return;
   const listElement = document.createElement('li');
   const linksElement = document.createElement('span');
-  parseCitation(doc, fullName, listElement, linksElement);
+
+  const authors = document.createElement('span');
+  for(var i = 0; i < doc.authIdHalFullName_fs.length; ++i)
+  {
+    const [_idHal, _fullName] = doc.authIdHalFullName_fs[i].split('_FacetSep_');
+    const author = document.createElement(_idHal ? 'a' : 'span');
+    if(_idHal) author.setAttribute("href",'https://cv.archives-ouvertes.fr/'+_idHal);
+    author.setAttribute("id",_idHal);
+    author.setAttribute("class","author");
+    const span = document.createElement('span');
+    span.innerHTML = _fullName;
+    author.appendChild(span);
+    authors.appendChild(author);
+  }
+  listElement.appendChild(authors);
+
+  const title = document.createElement('a');
+  title.setAttribute("href",'https://hal.archives-ouvertes.fr/'+doc.halId_s);
+  title.setAttribute("class","title");
+  const title_en = document.createElement('span');
+  const title_fr = document.createElement('span');
+  title_en.setAttribute("class","lang-en");
+  title_fr.setAttribute("class","lang-fr");
+  title_en.innerHTML = doc.en_title_s || doc.fr_title_s;
+  title_fr.innerHTML = doc.fr_title_s || doc.en_title_s;
+  title.appendChild(title_en);
+  title.appendChild(title_fr);
+  listElement.appendChild(title);
+
+  const ref = document.createElement('span');
+  parseCitation(doc, ref, linksElement);
+  listElement.appendChild(ref);
 
   // create an a element with the url of the pdf
-  const fileMain = doc.fileMain_s || doc.fileMainAnnex_s;
-  const files = doc.files_s || (fileMain ? [fileMain] : []);
+  const file = doc.linkExtUrl_s || doc.fileMain_s || doc.fileMainAnnex_s;
+  const files = doc.files_s || (file ? [file] : []);
   for(var i = 0; i < files.length; ++i)
   {
     const file = files[i];
@@ -188,5 +215,6 @@ var createPub = function(doc, fullName, parent){
   linksElement.insertBefore(createBibtex(doc.label_bibtex), linksElement.firstChild);
   listElement.insertBefore(linksElement, listElement.firstChild);
   parent.appendChild(listElement);
+  jQuery('lang-en').hide();
 }
 

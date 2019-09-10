@@ -21,7 +21,7 @@
   });
 
   // language
-	// Hide Language En when the web page loads
+	// Hide Language FR when the web page loads
   $('.lang-fr').hide();
   $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
     if(previousValue == 'English'){

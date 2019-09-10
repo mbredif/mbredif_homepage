@@ -1,7 +1,35 @@
 .fa-publons::before {
-  content: url('img/icons/publons-b.svg')
+  content: url('img/icons/publons-b.svg');
 }
 
 .imgLink {
-  float:right
+  float:right;
+}
+
+.author {
+  color: grey;
+}
+
+.author#mathieu-bredif span {
+  text-decoration: underline;
+}
+
+.author:not(:last-child):after {
+  content: ", ";
+}
+
+.author:last-child:after {
+  content: ". ";
+}
+
+.title::after {
+  content: ". ";
+}
+
+
+.title {
+}
+
+.lang-fr {
+  display: none;
 }
