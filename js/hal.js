@@ -23,7 +23,7 @@
 // documentation on HAL API: https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 
 var halApi = function(halId){
-  const fl = 'halId_s,authIdHalFullName_fs,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,linkExtUrl_s,en_title_s,fr_title_s,label_bibtex,citationRef_s';
+  const fl = 'halId_s,authIdHalFullName_fs,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,linkExtUrl_s,title_s,en_title_s,fr_title_s,label_bibtex,citationRef_s';
   return "https://api.archives-ouvertes.fr/search/?q=authIdHal_s:%22"+halId+"%22&wt=json&sort=producedDateY_i desc&rows=10000&fl="+fl;
 }
 
@@ -181,14 +181,18 @@ var createPub = function(doc, fullName, parent){
   const title = document.createElement('a');
   title.setAttribute("href",'https://hal.archives-ouvertes.fr/'+doc.halId_s);
   title.setAttribute("class","title");
-  const title_en = document.createElement('span');
-  const title_fr = document.createElement('span');
-  title_en.setAttribute("class","lang-en");
-  title_fr.setAttribute("class","lang-fr");
-  title_en.innerHTML = doc.en_title_s || doc.fr_title_s;
-  title_fr.innerHTML = doc.fr_title_s || doc.en_title_s;
-  title.appendChild(title_en);
-  title.appendChild(title_fr);
+  if (doc.en_title_s && doc.fr_title_s) {
+    const title_en = document.createElement('span');
+    const title_fr = document.createElement('span');
+    title_en.setAttribute("class","lang-en");
+    title_fr.setAttribute("class","lang-fr");
+    title_en.innerHTML = doc.en_title_s;
+    title_fr.innerHTML = doc.fr_title_s;
+    title.appendChild(title_en);
+    title.appendChild(title_fr);
+  } else {
+    title.innerHTML = doc.en_title_s || doc.fr_title_s || doc.title_s;
+  }
   listElement.appendChild(title);
 
   const ref = document.createElement('span');
