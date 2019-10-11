@@ -23,11 +23,13 @@
 // documentation on HAL API: https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 
 var halApi = function(halId){
-  const fl = 'halId_s,authIdHalFullName_fs,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,linkExtUrl_s,title_s,en_title_s,fr_title_s,label_bibtex,citationRef_s';
+  const fl = 'fileAnnexesFigure_s,invitedCommunication_s,proceedings_s,popularLevel_s,halId_s,authIdHalFullName_fs,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,linkExtUrl_s,title_s,en_title_s,fr_title_s,label_bibtex,citationRef_s';
   return "https://api.archives-ouvertes.fr/search/?q=authIdHal_s:%22"+halId+"%22&wt=json&sort=producedDateY_i desc&rows=10000&fl="+fl;
 }
 
-var getPublications = function(halId, fullName, parent, params){
+var getPublications = function(halId, parent, params){
+  if (!parent) return;
+
   // Create a request variable and assign a new XMLHttpRequest object to it.
   var request = new XMLHttpRequest();
 
@@ -43,62 +45,82 @@ var getPublications = function(halId, fullName, parent, params){
     } else {
       const ol = document.createElement('ol');
       ol.setAttribute("class","sub");
-      docs.forEach(doc => createPub(doc, fullName, ol));
+      docs.forEach(doc => createPub(doc, ol));
       parent.appendChild(ol);
     }
   };
   request.send();
 }
 
-var getJournalPublicationsAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubJ");
-  var params = "&fq=docType_s:\"ART\"";
-  return getPublications(halId, fullName, parent, params);
-}
-var getBookPublicationsAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubB");
-  var params = "&fq=docType_s:\"COUV\"";
-  return getPublications(halId, fullName, parent, params);
-}
-
-var getWorkshopPublicationsAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubW");
-  var params = "&fq=docType_s:\"POSTER\"";
-  return getPublications(halId, fullName, parent, params);
-}
-
-var getPreprintPublicationsAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubP");
-  var params = "&fq=docType_s:(\"REPORT\" OR \"UNDEFINED\")";
-  return getPublications(halId, fullName, parent, params);
+const publication_options = {
+  pubPV:  "&fq=popularLevel_s:1",
+  pubASCL:"&fq=popularLevel_s:0&fq=docType_s:\"ART\"&fq=peerReviewing_s:0",
+  pubACL: "&fq=popularLevel_s:0&fq=docType_s:\"ART\"&fq=peerReviewing_s:1&fq=audience_s:2",
+  pubACLN:"&fq=popularLevel_s:0&fq=docType_s:\"ART\"&fq=peerReviewing_s:1&fq=audience_s:(NOT 2)",
+  pubINV: "&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:1",
+  pubCOM: "&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0&fq=proceedings_s:0",
+  pubACTI:"&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0&fq=proceedings_s:1&fq=audience_s:2",
+  pubACTN:"&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0&fq=proceedings_s:1&fq=audience_s:(NOT 2)",
+  pubOS:  "&fq=popularLevel_s:0&fq=docType_s:\"COUV\"",
+  pubDO:  "&fq=popularLevel_s:0&fq=docType_s:\"DOUV\"",
+  pubAP:  "&fq=popularLevel_s:0&fq=docType_s:(\"REPORT\" OR \"UNDEFINED\")",
+  pubTH:  "&fq=popularLevel_s:0&fq=docType_s:(\"THESE\" OR \"HDR\")",
+  pubAFF: "&fq=popularLevel_s:0&fq=docType_s:\"POSTER\""
 }
 
-var getDissertationPublicationsAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubD");
-  var params = "&fq=docType_s:(\"THESE\" OR \"HDR\")";
-  return getPublications(halId, fullName, parent, params);
+// based on http://production-scientifique.bnf.fr/Annexe/cadre-de-classement
+function classement(doc) 
+{
+  if (doc.popularLevel_s == 1) return 'PV';
+  if (doc.docType_s == 'COUV') return 'OS';
+  if (doc.docType_s == 'DOUV') return 'DO';
+  if (doc.docType_s == 'POSTER') return 'AFF';
+  if (doc.docType_s == 'THESE' || doc.docType_s == 'HDR') return 'TH';
+  if (doc.docType_s == 'REPORT' || doc.docType_s == 'UNDEFINED') return 'AP';
+  if (doc.docType_s == 'COMM')
+  {
+    console.log(doc);
+    if (doc.invitedCommunication_s == 1) return 'INV';
+    if (doc.proceedings_s == 0) return 'COM';
+    if (doc.audience_s == 2) return 'ACTI';
+    return 'ACTN';
+  }
+  if (doc.docType_s == 'ART')
+  {
+    if (doc.peerReviewing_s == 0) return 'ASCL';
+    if (doc.audience_s == 2) return 'ACL';
+    return 'ACLN';
+  }
+  return '???';
 }
 
-var getConfPublicationsAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubC");
-  var params = "&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0";
-  return getPublications(halId, fullName, parent, params);
+var getPublicationsAuthor = function(halId, options = publication_options)
+{
+  for (var id in options)
+    getPublications(halId, document.getElementById(id), options[id]);
 }
 
-var getInvitedTalksAuthor = function(halId, fullName){
-  var parent = document.getElementById("pubT");
-  var params = "&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:1";
-  return getPublications(halId, fullName, parent, params);
+var getKeywordPublicationsAuthor = function(halId, keyword, parent){
+  parent = document.getElementById(parent || "pub") || parent;
+  getPublications(halId, parent, "&fq=keyword_s:\""+keyword+"\"");
 }
 
-var getPublicationsAuthor = function(halId, fullName){
-  getJournalPublicationsAuthor(halId, fullName);
-  getConfPublicationsAuthor(halId, fullName);
-  getBookPublicationsAuthor(halId, fullName);
-  getWorkshopPublicationsAuthor(halId, fullName);
-  getDissertationPublicationsAuthor(halId, fullName);
-  getPreprintPublicationsAuthor(halId, fullName);
-  getInvitedTalksAuthor(halId, fullName);
+var getKeywordPublicationsAuthorYear = function(halId, keyword, year, parent){
+  parent = document.getElementById(parent || "pub") || parent;
+  getPublications(halId, parent, "&fq=keyword_s:\""+keyword+"\"&fq=producedDateY_i:"+year);
+}
+
+var getKeywordPublicationsAuthorStartYear = function(halId, keyword, startYear, parent, endYear){
+  parent = document.getElementById(parent || "pub") || parent;
+console.log(parent);
+  endYear = endYear || new Date().getFullYear();
+  for(year=endYear;year >= startYear;year--)
+  {
+	var divElement = document.createElement('div');
+	divElement.innerHTML = year;
+	const yearParentElement = parent.appendChild(divElement);
+        getKeywordPublicationsAuthorYear(halId, keyword, year, yearParentElement);
+  }
 }
 
 function parseCitation(doc, citationElement, linksElement)
@@ -157,11 +179,14 @@ function createBibtex(label_bibtex, parent)
   return spanElement;
 }
 
-var createPub = function(doc, fullName, parent){
+var createPub = function(doc, parent){
   // console.log(doc);
   if (!parent) return;
   const listElement = document.createElement('li');
+  listElement.setAttribute("class", "bib");
+  listElement.setAttribute("id", doc.halId_s);
   const linksElement = document.createElement('span');
+  // listElement.innerHTML = '<b>'+classement(doc)+'</b>';
 
   const authors = document.createElement('span');
   for(var i = 0; i < doc.authIdHalFullName_fs.length; ++i)
@@ -179,6 +204,7 @@ var createPub = function(doc, fullName, parent){
   listElement.appendChild(authors);
 
   const title = document.createElement('a');
+  
   title.setAttribute("href",'https://hal.archives-ouvertes.fr/'+doc.halId_s);
   title.setAttribute("class","title");
   if (doc.en_title_s && doc.fr_title_s) {
@@ -191,7 +217,7 @@ var createPub = function(doc, fullName, parent){
     title.appendChild(title_en);
     title.appendChild(title_fr);
   } else {
-    title.innerHTML = doc.en_title_s || doc.fr_title_s || doc.title_s;
+    title.innerHTML = (doc.en_title_s || doc.fr_title_s || doc.title_s);
   }
   listElement.appendChild(title);
 
