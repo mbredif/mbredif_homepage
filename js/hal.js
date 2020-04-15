@@ -22,6 +22,8 @@
 
 // documentation on HAL API: https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 
+var halBlacklist = halBlacklist || [];
+
 var halApi = function(halId){
   const fl = 'fileAnnexesFigure_s,invitedCommunication_s,proceedings_s,popularLevel_s,halId_s,authIdHalFullName_fs,producedDateY_i,docType_s,files_s,fileMain_s,fileMainAnnex_s,linkExtUrl_s,title_s,en_title_s,fr_title_s,label_bibtex,citationRef_s';
   return "https://api.archives-ouvertes.fr/search/?q=authIdHal_s:%22"+halId+"%22&wt=json&sort=producedDateY_i desc&rows=10000&fl="+fl;
@@ -182,6 +184,8 @@ function createBibtex(label_bibtex, parent)
 var createPub = function(doc, parent){
   // console.log(doc);
   if (!parent) return;
+  if (halBlacklist.includes(doc.halId_s)) return;
+
   const listElement = document.createElement('li');
   listElement.setAttribute("class", "bib");
   listElement.setAttribute("id", doc.halId_s);
