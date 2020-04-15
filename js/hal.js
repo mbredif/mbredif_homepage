@@ -53,19 +53,19 @@ var getPublications = function(halId, parent, params){
 }
 
 const publication_options = {
-  pubPV:  "&fq=popularLevel_s:1",
-  pubASCL:"&fq=popularLevel_s:0&fq=docType_s:\"ART\"&fq=peerReviewing_s:0",
-  pubACL: "&fq=popularLevel_s:0&fq=docType_s:\"ART\"&fq=peerReviewing_s:1&fq=audience_s:2",
-  pubACLN:"&fq=popularLevel_s:0&fq=docType_s:\"ART\"&fq=peerReviewing_s:1&fq=audience_s:(NOT 2)",
-  pubINV: "&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:1",
-  pubCOM: "&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0&fq=proceedings_s:0",
-  pubACTI:"&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0&fq=proceedings_s:1&fq=audience_s:2",
-  pubACTN:"&fq=popularLevel_s:0&fq=docType_s:\"COMM\"&fq=invitedCommunication_s:0&fq=proceedings_s:1&fq=audience_s:(NOT 2)",
-  pubOS:  "&fq=popularLevel_s:0&fq=docType_s:\"COUV\"",
-  pubDO:  "&fq=popularLevel_s:0&fq=docType_s:\"DOUV\"",
-  pubAP:  "&fq=popularLevel_s:0&fq=docType_s:(\"REPORT\" OR \"UNDEFINED\")",
-  pubTH:  "&fq=popularLevel_s:0&fq=docType_s:(\"THESE\" OR \"HDR\")",
-  pubAFF: "&fq=popularLevel_s:0&fq=docType_s:\"POSTER\""
+  pubPV:  '&fq=popularLevel_s:1',
+  pubASCL:'&fq=popularLevel_s:0&fq=docType_s:"ART"&fq=peerReviewing_s:0',
+  pubACL: '&fq=popularLevel_s:0&fq=docType_s:"ART"&fq=peerReviewing_s:1&fq=audience_s:2',
+  pubACLN:'&fq=popularLevel_s:0&fq=docType_s:"ART"&fq=peerReviewing_s:1&fq=audience_s:(NOT 2)',
+  pubINV: '&fq=popularLevel_s:0&fq=docType_s:"COMM"&fq=invitedCommunication_s:1',
+  pubCOM: '&fq=popularLevel_s:0&fq=docType_s:"COMM"&fq=invitedCommunication_s:0&fq=proceedings_s:0',
+  pubACTI:'&fq=popularLevel_s:0&fq=docType_s:"COMM"&fq=invitedCommunication_s:0&fq=proceedings_s:1&fq=audience_s:2',
+  pubACTN:'&fq=popularLevel_s:0&fq=docType_s:"COMM"&fq=invitedCommunication_s:0&fq=proceedings_s:1&fq=audience_s:(NOT 2)',
+  pubOS:  '&fq=popularLevel_s:0&fq=docType_s:"COUV"',
+  pubDO:  '&fq=popularLevel_s:0&fq=docType_s:"DOUV"',
+  pubAP:  '&fq=popularLevel_s:0&fq=docType_s:("REPORT" OR "UNDEFINED")',
+  pubTH:  '&fq=popularLevel_s:0&fq=docType_s:("THESE" OR "HDR")',
+  pubAFF: '&fq=popularLevel_s:0&fq=docType_s:"POSTER"'
 }
 
 // based on http://production-scientifique.bnf.fr/Annexe/cadre-de-classement
@@ -102,12 +102,12 @@ var getPublicationsAuthor = function(halId, options = publication_options)
 
 var getKeywordPublicationsAuthor = function(halId, keyword, parent){
   parent = document.getElementById(parent || "pub") || parent;
-  getPublications(halId, parent, "&fq=keyword_s:\""+keyword+"\"");
+  getPublications(halId, parent, '&fq=keyword_s:"'+keyword+'"');
 }
 
 var getKeywordPublicationsAuthorYear = function(halId, keyword, year, parent){
   parent = document.getElementById(parent || "pub") || parent;
-  getPublications(halId, parent, "&fq=keyword_s:\""+keyword+"\"&fq=producedDateY_i:"+year);
+  getPublications(halId, parent, '&fq=keyword_s:"'+keyword+'"&fq=producedDateY_i:'+year);
 }
 
 var getKeywordPublicationsAuthorStartYear = function(halId, keyword, startYear, parent, endYear){
