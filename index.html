@@ -31,16 +31,12 @@
   <script src="js/reviewing.js" charset="utf-8"></script>
   <script src="js/hal.js" charset="utf-8"></script>
   <script>
-    halBlacklist = [];
-//hal-02381392
-//hal-01557698 
-//hal-00834944
-//hal-02492616
+    halIdBlacklist = [];
   </script>
 
 </head>
 
-<body id="page-top" onload="reviewingVis('reviewing.json'); getPublicationsAuthor('mathieu-bredif');">
+<body id="page-top" onload="reviewingVis('reviewing.json'); getPublications('mathieu-bredif');">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
     <select class="selectpicker" data-width="fit">
