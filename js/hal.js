@@ -81,6 +81,7 @@ function getPubKey(doc)
   if (doc.docType_s == 'POSTER') return 'AFF';
   if (doc.docType_s == 'THESE') return 'TH';
   if (doc.docType_s == 'HDR') return 'TH';
+  if (doc.docType_s == 'MEM') return 'AP';
   if (doc.docType_s == 'REPORT') return 'AP';
   if (doc.docType_s == 'UNDEFINED') return 'AP';
   if (doc.docType_s == 'OTHER') return 'AP';
