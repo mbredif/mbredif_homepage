@@ -99,7 +99,8 @@ function getPubKey(doc)
     if (doc.audience_s == 2) return 'ACL';
     return 'ACLN';
   }
-  throw new Error('unable to classify this document : ' + JSON.stringify(doc));
+  console.warn('unable to classify this document : ' + JSON.stringify(doc));
+  return '';
 }
 
 var getPublications = function(authIdHal, pubKey, queries){
